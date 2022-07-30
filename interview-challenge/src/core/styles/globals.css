@@ -1,0 +1,21 @@
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+
+:root {
+  --BG: #e5e5e5;
+}
+
+html,
+body {
+  direction: rtl;
+  font-family: Vazirmatn, sans-serif;
+  font-style: normal;
+  background-color: var(--BG);
+  overflow-x: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Vazirmatn, sans-serif;
+}

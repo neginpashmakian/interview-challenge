@@ -1,0 +1,19 @@
+.dashboard-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &__container {
+    display: flex;
+    overflow: hidden;
+    flex: 100%;
+  }
+
+  &__main {
+    display: flex;
+    flex: 100%;
+    background-color: rgb(209, 226, 226);
+    padding: 2rem;
+  }
+}

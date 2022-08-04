@@ -1,0 +1,30 @@
+.sidebar {
+  height: 100%;
+  flex-shrink: 0;
+
+  width: var(--dim-sidebar-width);
+  background-color: var(--color-blue-dark);
+
+  &__title {
+    color: var(--color-white);
+    font-size: var(--font-large);
+    margin: var(--spacing-normal);
+  }
+
+  li {
+    a {
+      text-decoration: none;
+      color: var(--color-white);
+      font-size: var(--font-normal);
+    }
+    display: flex;
+    align-items: center;
+
+    padding-left: var(--spacing-large);
+    height: var(--dim-xxlarge);
+    cursor: pointer;
+    &:hover {
+      background-color: var(--color-blue-light);
+    }
+  }
+}

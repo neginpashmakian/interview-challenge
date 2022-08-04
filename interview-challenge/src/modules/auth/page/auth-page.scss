@@ -1,0 +1,13 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  min-height: 100vh;
+
+  overflow: hidden;
+  background-color: var(--color-white);
+  @media (min-width: 960px) {
+    padding: 1.5rem;
+  }
+}

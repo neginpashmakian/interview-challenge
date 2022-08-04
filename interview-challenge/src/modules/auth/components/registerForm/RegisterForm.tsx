@@ -1,9 +1,14 @@
-import { Button, TextField } from '@mui/material'
+import { Button, CircularProgress, TextField } from '@mui/material'
 import { useRegisterAPI } from 'API/hooks'
 import { useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
-import { LoginFormValidationSchema } from './loginValidation'
+import { useNavigate } from 'react-router-dom'
+import { routeNames } from 'routes'
+import { produce } from 'immer'
+import { LoginFormValidationSchema } from 'modules/auth'
 import './register-form.scss'
+import { useSetRecoilState } from 'recoil'
+import { userAtom } from 'store'
 
 interface IForm {
   username: string
@@ -12,6 +17,9 @@ interface IForm {
 }
 
 export const RegisterForm = () => {
+
+  const setUserState = useSetRecoilState(userAtom)
+
   const methods = useForm<IForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -23,7 +31,9 @@ export const RegisterForm = () => {
     formState: { isValid, isSubmitting },
   } = methods
 
-  const { data, mutate: mutateRegister } = useRegisterAPI()
+  const { isLoading, mutate: mutateRegister } = useRegisterAPI()
+
+  const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async data => {
     mutateRegister({
@@ -32,19 +42,34 @@ export const RegisterForm = () => {
         password: data.password,
         email: data.email,
       },
+    }, {
+      onSuccess: (data) => {
+        if (data)
+          setUserState(
+            data.user
+          );
+
+        // TODO: navigate to dashboard
+      },
+      onError: (err) => {
+        // TODO: handle error
+      }
     })
 
-    console.log('data', data)
+
   })
 
-  const [passwordType, setPasswordType] = useState(true)
 
-  const [isPasswordWrong, setIsPasswordWrong] = useState<boolean>(false)
+
+
+  const handleOnLoginClick = () => {
+    navigate(routeNames.auth.login)
+  }
 
   return (
     <FormProvider {...methods}>
       <form className="register-form" onSubmit={onSubmit}>
-        <h2 className="register-form__title">Register</h2>
+        <h2 className="register-form__title">{"Register"}</h2>
 
         <Controller
           name="username"
@@ -95,7 +120,7 @@ export const RegisterForm = () => {
               autoFocus
               fullWidth
               required
-              type={passwordType ? 'password' : 'text'}
+              type={'password'}
               helperText={fieldState.error?.message}
             />
           )}
@@ -105,22 +130,25 @@ export const RegisterForm = () => {
           color="primary"
           fullWidth
           type="submit"
-          // disabled={isLoading || isLoadingGenerateOtp}
-          // loading={isLoading}
+          disabled={isLoading}
+          size="large"
         >
-          register
+          {
+            isLoading ?
+              <CircularProgress size={24} />
+              :
+              "Register"
+          }
         </Button>
         <div className="register-form__login">
-          Already Registered?
+          {"Already Registered?"}
           <Button
             variant="text"
             color="primary"
             fullWidth
-            type="submit"
-            // disabled={isLoading || isLoadingGenerateOtp}
-            // loading={isLoading}
+            onClick={handleOnLoginClick}
           >
-            login
+            {"login"}
           </Button>
         </div>
       </form>

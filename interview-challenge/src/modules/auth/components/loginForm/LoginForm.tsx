@@ -1,30 +1,60 @@
-import { Button, TextField } from '@mui/material'
-import { useState } from 'react'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
-import './login-form.scss'
-import { LoginFormValidationSchema } from './loginValidation'
+import { Button, CircularProgress, TextField } from '@mui/material';
+import { useLoginAPI } from 'API/hooks';
+import produce from 'immer';
+import { LoginFormValidationSchema } from 'modules/auth';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useSetRecoilState } from 'recoil';
+import { routeNames } from 'routes';
+import { userAtom } from 'store';
+import './login-form.scss';
 
 interface IForm {
-  username: string
+  email: string
   password: string
 }
 
 export const LoginForm = () => {
+
+
+  const setUserState = useSetRecoilState(userAtom)
+
+  const navigate = useNavigate()
+
   const methods = useForm<IForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: LoginFormValidationSchema,
     defaultValues: {},
   })
+
   const {
     handleSubmit,
     formState: { isValid, isSubmitting },
   } = methods
-  const onSubmit = handleSubmit(async form => {})
 
-  const [passwordType, setPasswordType] = useState(true)
+  const { isLoading, mutate: login } = useLoginAPI()
 
-  const [isPasswordWrong, setIsPasswordWrong] = useState<boolean>(false)
+  const onSubmit = handleSubmit(async form => {
+    login({
+      user: {
+        email: form.email,
+        password: form.password
+      }
+    }, {
+      onSuccess: (data) => {
+        if (data) {
+          setUserState(data.user)
+          navigate(routeNames.app)
+        }
+      },
+      onError: (errors) => {
+        toast.error('Email or password is invalid');
+      }
+    })
+  })
+
 
   return (
     <FormProvider {...methods}>
@@ -65,7 +95,7 @@ export const LoginForm = () => {
               autoFocus
               fullWidth
               required
-              type={passwordType ? 'password' : 'text'}
+              type='password'
               helperText={fieldState.error?.message}
             />
           )}
@@ -74,10 +104,16 @@ export const LoginForm = () => {
           variant="contained"
           color="primary"
           fullWidth
-          // disabled={isLoading || isLoadingGenerateOtp}
           // loading={isLoading}
+          disabled={isLoading}
+          type="submit"
+          size="large"
         >
-          login
+          {
+            isLoading ?
+              <CircularProgress size={24} />
+              : "login"
+          }
         </Button>
       </form>
     </FormProvider>

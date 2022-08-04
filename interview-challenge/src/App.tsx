@@ -1,12 +1,9 @@
-import Login from "./modules/auth/page/Login";
-
-import "./styles/globals.css";
+import { useRoutes } from 'react-router-dom'
+import { appRoutes } from 'routes'
+import './core/styles/globals.css'
 function App() {
-  return (
-    <div className="App">
-      <Login></Login>
-    </div>
-  );
+  const element = useRoutes(appRoutes)
+  return <div className="App">{element}</div>
 }
 
-export default App;
+export default App

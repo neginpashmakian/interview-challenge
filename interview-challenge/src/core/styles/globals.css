@@ -6,7 +6,7 @@
 
 html,
 body {
-  direction: rtl;
+  direction: ltr;
   font-family: Vazirmatn, sans-serif;
   font-style: normal;
   background-color: var(--BG);

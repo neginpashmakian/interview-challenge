@@ -1,0 +1,78 @@
+/*
+  UniClient Theme Variables
+
+  CSS Variables Naming Scheme:
+    --color-(name)-(shade?) for colors;
+    --spacing-(name)-(type)-(variant?)-(state?) for spacings, such as padding, margin;
+    --dim-(name)-(type)-(variant?)-(state?) for dimentions, such as height, radius;
+    --transition-(name)-(variant?) for transitions;
+*/
+
+:root {
+  // Base Colors
+  --color-white: #fff;
+
+  --color-black: #181b1f;
+
+  --color-gray-50: #eceeef;
+  --color-gray-100: #dddddd;
+  --color-gray-200: #818a91;
+  --color-gray-300: #777777;
+  --color-gray-400: #55595c;
+  --color-gray-500: #373a3c;
+
+  --color-red-dark: #d9534f;
+  --color-red-light: #efdfdf;
+
+  --color-blue-dark: #1c7cd5;
+  --color-blue-light: #56c0e0;
+
+  --color-orange-dark: #f0ad4e;
+  --color-orange-light: #fcf7e4;
+
+  --color-green-dark: #5cb85c;
+  --color-green-light: #e2eed8;
+}
+
+:root {
+  // Spacings
+  --spacing-xxxsmall: 0.125rem;
+  --spacing-xxsmall: 0.25rem;
+  --spacing-xsmall: 0.5rem;
+  --spacing-small: 0.75rem;
+  --spacing-normal: 1rem;
+  --spacing-large: 1.5rem;
+  --spacing-xlarge: 2rem;
+  --spacing-xxlarge: 3rem;
+  --spacing-xxxlarge: 4rem;
+
+  // Dimensions
+
+  // general dimensions
+  --dim-xxsmall: 0.25rem;
+  --dim-xsmall: 0.5rem;
+  --dim-small: 0.75rem;
+  --dim-normal: 1rem;
+  --dim-large: 1.5rem;
+  --dim-xlarge: 2rem;
+  --dim-xxlarge: 3rem;
+  --dim-xxxlarge: 4rem;
+
+  // general font size
+  --font-xxsmall: 0.25rem;
+  --font-xsmall: 0.5rem;
+  --font-small: 0.75rem;
+  --font-normal: 1rem;
+  --font-large: 1.5rem;
+  --font-xlarge: 2rem;
+  --font-xxlarge: 3rem;
+
+  // special dimensions
+  --dim-topbar-height: 60px;
+  --dim-sidebar-width: 250px;
+
+  --z-index-floating-avatars: 5;
+  --z-index-slick-list: 4; // react-slick-slider
+
+  --z-index-mr-grouping-more-btn: 1;
+}

@@ -4,14 +4,24 @@
   align-items: center;
 
   padding: 0rem var(--spacing-normal);
-  //TODO:use css variable
   width: 100%;
-  height: 4rem;
+  height: var(--dim-appbar-height);
 
   background-color: var(--color-gray-500);
+  justify-content: space-between;
 
   &__logo {
     color: var(--color-white);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  &__user {
+    color: var(--color-white);
+  }
+
+  &__start-side {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
 }

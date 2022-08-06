@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { routeNames } from 'routes'
 import './sidebar.scss'
 
@@ -9,10 +9,24 @@ export const Sidebar: React.FC = () => {
       <div className="sidebar__title">Post</div>
       <ul>
         <li>
-          <Link to={routeNames.private.article.base}>All Articles</Link>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? 'sidebar__link sidebar__link--active' : 'sidebar__link'
+            }
+            to={routeNames.private.article.base}
+          >
+            {'All Articles'}
+          </NavLink>
         </li>
         <li>
-          <Link to={routeNames.private.article.detail}>New Article</Link>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? 'sidebar__link sidebar__link--active' : 'sidebar__link'
+            }
+            to={routeNames.private.article.new}
+          >
+            {'New Article'}
+          </NavLink>
         </li>
       </ul>
     </nav>

@@ -1,14 +1,14 @@
-import { Button, CircularProgress, TextField } from '@mui/material';
-import { useLoginAPI } from 'API/hooks';
-import produce from 'immer';
-import { LoginFormValidationSchema } from 'modules/auth';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useSetRecoilState } from 'recoil';
-import { routeNames } from 'routes';
-import { userAtom } from 'store';
-import './login-form.scss';
+import { Button, CircularProgress, TextField } from '@mui/material'
+import { useLoginAPI } from 'API/hooks'
+import { accessToken, LoginFormValidationSchema } from 'modules/auth'
+import { useCallback } from 'react'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useSetRecoilState } from 'recoil'
+import { routeNames } from 'routes'
+import { userAtom } from 'store'
+import './login-form.scss'
 
 interface IForm {
   email: string
@@ -16,8 +16,6 @@ interface IForm {
 }
 
 export const LoginForm = () => {
-
-
   const setUserState = useSetRecoilState(userAtom)
 
   const navigate = useNavigate()
@@ -37,24 +35,33 @@ export const LoginForm = () => {
   const { isLoading, mutate: login } = useLoginAPI()
 
   const onSubmit = handleSubmit(async form => {
-    login({
-      user: {
-        email: form.email,
-        password: form.password
-      }
-    }, {
-      onSuccess: (data) => {
-        if (data) {
-          setUserState(data.user)
-          navigate(routeNames.app)
-        }
+    login(
+      {
+        user: {
+          email: form.email,
+          password: form.password,
+        },
       },
-      onError: (errors) => {
-        toast.error('Email or password is invalid');
+      {
+        onSuccess: data => {
+          if (data) {
+            setUserState(data.user)
+            accessToken.set(data.user.token)
+            navigate(routeNames.private.article.base)
+          }
+          toast.error('Login Successfully')
+        },
+
+        onError: errors => {
+          toast.error('Email or password is invalid')
+        },
       }
-    })
+    )
   })
 
+  const handleOnRegisterClick = useCallback(() => {
+    navigate(routeNames.auth.register)
+  }, [])
 
   return (
     <FormProvider {...methods}>
@@ -95,7 +102,7 @@ export const LoginForm = () => {
               autoFocus
               fullWidth
               required
-              type='password'
+              type="password"
               helperText={fieldState.error?.message}
             />
           )}
@@ -109,12 +116,18 @@ export const LoginForm = () => {
           type="submit"
           size="large"
         >
-          {
-            isLoading ?
-              <CircularProgress size={24} />
-              : "login"
-          }
+          {isLoading ? <CircularProgress size={24} /> : 'login'}
         </Button>
+        <div>
+          <Button
+            variant="text"
+            color="primary"
+            fullWidth
+            onClick={handleOnRegisterClick}
+          >
+            {'Register'}
+          </Button>
+        </div>
       </form>
     </FormProvider>
   )

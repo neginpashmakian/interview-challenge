@@ -8,6 +8,13 @@ $breakpoint-xl: 1960px;
   border-spacing: 0;
   background-color: var(--color-background);
 
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
   &__header {
   }
   &__header-row {

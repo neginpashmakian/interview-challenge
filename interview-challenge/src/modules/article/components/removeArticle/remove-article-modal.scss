@@ -1,0 +1,32 @@
+.remove-article-modal {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    padding: var(--spacing-normal);
+  }
+  &__title.MuiTypography-root {
+    font-weight: 700;
+  }
+
+  &__content {
+    height: 100px;
+    border-block-start: 1px solid var(--color-gray-100);
+    border-block-end: 1px solid var(--color-gray-100);
+    padding: 1.5rem 1rem;
+  }
+
+  &__footer {
+    display: flex;
+    align-self: flex-end;
+    align-items: center;
+    gap: 1rem;
+    padding: var(--spacing-normal);
+    color: var(--color-gray-200);
+    justify-content: flex-end;
+  }
+
+  &__btn-no {
+  }
+}

@@ -5,10 +5,11 @@ import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { routeNames } from 'routes'
 import { produce } from 'immer'
-import { LoginFormValidationSchema } from 'modules/auth'
+import { accessToken, LoginFormValidationSchema } from 'modules/auth'
 import './register-form.scss'
 import { useSetRecoilState } from 'recoil'
 import { userAtom } from 'store'
+import { toast } from 'react-toastify'
 
 interface IForm {
   username: string
@@ -48,11 +49,12 @@ export const RegisterForm = () => {
           setUserState(
             data.user
           );
+        accessToken.set(data.user.token)
 
-        // TODO: navigate to dashboard
+        navigate(routeNames.private.article.base)
       },
       onError: (err) => {
-        // TODO: handle error
+        toast.error('Register was unsuccess')
       }
     })
 

@@ -9,22 +9,28 @@ import {
   Select,
   TextField,
 } from '@mui/material'
-import { useCreateArticleAPI } from 'API/hooks'
+import { useCreateArticleAPI, useGetArticleAPI } from 'API/hooks'
 import { useGetTagListAPI } from 'API/hooks/tag'
-import { useState } from 'react'
+import { ICreateArticleAPIReq, IUpdateArticleAPIReq } from 'API/models'
+import { useEffect, useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import './article-form.scss'
 import { ArticleFormValidationSchema } from './ArticleFormValidation'
 
-// type Form = IUpdateUclProjectReq & IAddProjectReq;
+type Form = IUpdateArticleAPIReq['article'] & ICreateArticleAPIReq['article']
 
 export const ArticleForm = () => {
-  const methods = useForm<any>({
+  const methods = useForm<Form>({
     mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: ArticleFormValidationSchema,
     defaultValues: {},
   })
+
+  const { slug } = useParams<{ slug: string }>()
+
   const { data: tags } = useGetTagListAPI()
 
   const [tagsName, setTags] = useState<string[]>([])
@@ -33,32 +39,51 @@ export const ArticleForm = () => {
     const {
       target: { value },
     } = event
-    setTags(typeof value === 'string' ? value.split(',') : value)
+    const tagList = typeof value === 'string' ? value.split(',') : value
+    setTags(tagList)
+    setValue('tagList', tagList)
   }
 
   const {
     reset,
     handleSubmit,
-    register,
+
     setValue,
-    watch,
-    control,
-    formState: { dirtyFields },
   } = methods
   const { mutate: mutateCreateArticle } = useCreateArticleAPI()
-  //   const practiceAreaList = useMemo()
-  //     () => (practiceAreaItems?.length ? practiceAreaItems?.[0].items : []),
-  //     [practiceAreaItems]
+
+  const { data: activeArticle } = useGetArticleAPI(
+    { slug: slug || '' },
+    { enabled: true }
+  )
+
+  useEffect(() => {
+    if (activeArticle) reset({ ...(activeArticle.article as Form) })
+    else {
+      reset({})
+    }
+  }, [reset, activeArticle])
 
   const onSubmit = handleSubmit(data => {
-    console.log('data', data)
-    mutateCreateArticle({
-      article: {
-        title: data.title,
-        description: data.description,
-        body: data.body,
+    mutateCreateArticle(
+      {
+        article: {
+          title: data.title,
+          description: data.description,
+          body: data.body,
+          tagList: data.tagList,
+        },
       },
-    })
+      {
+        onSuccess: () => {
+          toast.success('Article created')
+          reset({})
+        },
+        onError: () => {
+          toast.error('Error creating article')
+        },
+      }
+    )
   })
 
   //   useEffect(() => {
@@ -83,7 +108,7 @@ export const ArticleForm = () => {
                   {...field}
                   inputRef={ref}
                   fullWidth
-                  label="Title"
+                  placeholder="Title"
                   className="article-form__input"
                 />
               )}
@@ -96,7 +121,7 @@ export const ArticleForm = () => {
                   inputRef={ref}
                   fullWidth
                   variant="outlined"
-                  label="description"
+                  placeholder="Description"
                   size="medium"
                   className="article-form__input"
                 />
@@ -114,7 +139,7 @@ export const ArticleForm = () => {
                     multiline
                     minRows={10}
                     maxRows={15}
-                    label="Body"
+                    placeholder="Body"
                     size="medium"
                     className="article-form__input"
                   />
@@ -136,9 +161,11 @@ export const ArticleForm = () => {
                     id="demo-multiple-checkbox"
                     multiple
                     value={tagsName}
+                    defaultValue={['welcome', 'introduction']}
+                    // defaultValue={activeArticle?.article.tagList}
+                    // defaultChecked={activeArticle?.article.tagList.map(x=>x.)}
                     onChange={e => {
                       handleChange(e)
-                      setValue('tags', e.target.value)
                     }}
                     input={<OutlinedInput label="Tag" />}
                     renderValue={selected => selected.join(', ')}

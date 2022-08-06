@@ -9,7 +9,11 @@ import {
   Select,
   TextField,
 } from '@mui/material'
-import { useCreateArticleAPI, useGetArticleAPI } from 'API/hooks'
+import {
+  useCreateArticleAPI,
+  useGetArticleAPI,
+  useUpdateArticleAPI,
+} from 'API/hooks'
 import { useGetTagListAPI } from 'API/hooks/tag'
 import { ICreateArticleAPIReq, IUpdateArticleAPIReq } from 'API/models'
 import { useEffect, useState } from 'react'
@@ -51,6 +55,7 @@ export const ArticleForm = () => {
     setValue,
   } = methods
   const { mutate: mutateCreateArticle } = useCreateArticleAPI()
+  const { mutate: mutateEditArticle } = useUpdateArticleAPI()
 
   const { data: activeArticle } = useGetArticleAPI(
     { slug: slug || '' },
@@ -65,6 +70,21 @@ export const ArticleForm = () => {
   }, [reset, activeArticle])
 
   const onSubmit = handleSubmit(data => {
+    if (activeArticle) {
+      mutateEditArticle(
+        {
+          article: {
+            ...data,
+          },
+          slug: slug || '',
+        },
+        {
+          onSuccess: () => {
+            toast.success('Update Successfully')
+          },
+        }
+      )
+    }
     mutateCreateArticle(
       {
         article: {
@@ -183,7 +203,7 @@ export const ArticleForm = () => {
           </div>
         </div>
         <Button type="submit" variant="contained">
-          submit
+          {activeArticle ? 'Edit' : 'submit'}
         </Button>
       </form>
     </FormProvider>

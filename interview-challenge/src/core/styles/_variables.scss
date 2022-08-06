@@ -32,6 +32,8 @@
 
   --color-green-dark: #5cb85c;
   --color-green-light: #e2eed8;
+
+  --color-background: #fafafa;
 }
 
 :root {
@@ -68,7 +70,7 @@
   --font-xxlarge: 3rem;
 
   // special dimensions
-  --dim-topbar-height: 60px;
+  --dim-appbar-height: 56px;
   --dim-sidebar-width: 250px;
 
   --z-index-floating-avatars: 5;

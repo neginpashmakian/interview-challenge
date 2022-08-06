@@ -1,0 +1,30 @@
+.my-modal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: var(--spacing-normal);
+
+  &__wrapper {
+    width: 100%;
+    max-width: 30rem;
+
+    position: relative;
+
+    border-radius: 4px;
+    background-color: var(--color-background);
+
+    outline: none !important;
+  }
+
+  &__close {
+    position: absolute;
+    inset-inline-end: var(--spacing-normal);
+    inset-block-start: var(--spacing-normal);
+
+    // .uni-button-icon {
+    //   color: var(--color-text-hint) !important;
+    // }
+  }
+}

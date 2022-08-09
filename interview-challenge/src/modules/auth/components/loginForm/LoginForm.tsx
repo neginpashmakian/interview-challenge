@@ -49,7 +49,7 @@ export const LoginForm = () => {
             accessToken.set(data.user.token)
             navigate(routeNames.private.article.base)
           }
-          toast.error('Login Successfully')
+          toast.success('Login Successfully')
         },
 
         onError: errors => {
